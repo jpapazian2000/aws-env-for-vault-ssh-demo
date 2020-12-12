@@ -10,9 +10,9 @@ output "ubuntu_pub-server_private_ip" {
     value = aws_instance.ubuntu_public.private_ip
 }
 
-output "ubuntu_priv-server_private_ip" {
-    value = aws_instance.ubuntu_private.private_ip
-}
+#output "ubuntu_priv-server_private_ip" {
+#    value = aws_instance.ubuntu_private.private_ip
+#}
 
 output "vpc" {
     value = aws_vpc.solvay.tags.Name
