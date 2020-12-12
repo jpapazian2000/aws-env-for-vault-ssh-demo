@@ -119,7 +119,7 @@ resource "aws_instance" "ubuntu_public" {
     ami                         = var.ubuntu_ami
     instance_type               = var.instance_type
     key_name                    = aws_key_pair.ubuntu_kp.key_name
-    subnet_id                   = aws_subnet.private.id
+    #subnet_id                   = aws_subnet.private.id
     vpc_security_group_ids      = [
         aws_security_group.allow_ssh_from_public.id,
     ]
