@@ -11,19 +11,19 @@ terraform {
 provider "aws" {
     region = var.region
 }
-resource "aws_vpc" "solvay" {
-    cidr_block              = "10.10.0.0/16"
-    enable_dns_hostnames    = true
+#resource "aws_vpc" "solvay" {
+#    cidr_block              = "10.10.0.0/16"
+#    enable_dns_hostnames    = true
 
-    tags = {
-        Name        = "jpapazian-solvay-public"
-        owner       = "jpapazian"
-        se-region   = "europe west 3"
-        purpose     = "customer solvay vault ssh demo"
-        ttl         = "8"
-        terraform   = "yes"
-    }
-}
+#    tags = {
+#        Name        = "jpapazian-solvay-public"
+#        owner       = "jpapazian"
+#        se-region   = "europe west 3"
+#        purpose     = "customer solvay vault ssh demo"
+#        ttl         = "8"
+#        terraform   = "yes"
+#    }
+#}
 
 #resource "aws_internet_gateway" "gw" {
 #    vpc_id          = aws_vpc.solvay.id
@@ -47,23 +47,23 @@ resource "aws_vpc" "solvay" {
 #    }
 #}
 
-resource "aws_subnet" "private" {
-    vpc_id          = aws_vpc.solvay.id
-    cidr_block      = "10.10.20.0/24"
+#resource "aws_subnet" "private" {
+#    vpc_id          = aws_vpc.solvay.id
+#    cidr_block      = "10.10.20.0/24"
 
-    tags = {
-        Name        = "jpapazian-solvay-public"
-        owner       = "jpapazian"
-        se-region   = "europe west 3"
-        purpose     = "customer solvay vault ssh demo"
-        ttl         = "8"
-        terraform   = "yes"
-    }
-}
+#    tags = {
+#        Name        = "jpapazian-solvay-public"
+#        owner       = "jpapazian"
+#        se-region   = "europe west 3"
+#        purpose     = "customer solvay vault ssh demo"
+#        ttl         = "8"
+#        terraform   = "yes"
+#    }
+#}
 
-data "aws_subnet" "select_private" {
-    id              = aws_subnet.private.id
-}
+#data "aws_subnet" "select_private" {
+#    id              = aws_subnet.private.id
+#}
 
 #resource "aws_network_interface" "private_if" {
 #    subnet_id       = aws_subnet.private.id
@@ -77,7 +77,7 @@ resource "aws_key_pair" "ubuntu_kp" {
 resource "aws_security_group" "allow_ssh_from_public" {
     name            = "allow ssh from public"
     description     = "allow ssh inbound traffic"
-    vpc_id         = aws_vpc.solvay.id
+#   vpc_id          = aws_vpc.solvay.id
 
     tags = {
         Name        = "jpapazian-solvay-public"
