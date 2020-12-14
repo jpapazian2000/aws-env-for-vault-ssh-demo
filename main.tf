@@ -11,59 +11,84 @@ terraform {
 provider "aws" {
     region = var.region
 }
-#resource "aws_vpc" "solvay" {
-#    cidr_block              = "10.10.0.0/16"
-#    enable_dns_hostnames    = true
+resource "aws_vpc" "solvay" {
+    cidr_block              = "10.10.0.0/16"
+    enable_dns_hostnames    = true
 
-#    tags = {
-#        Name        = "jpapazian-solvay-public"
-#        owner       = "jpapazian"
-#        se-region   = "europe west 3"
-#        purpose     = "customer solvay vault ssh demo"
-#        ttl         = "8"
-#        terraform   = "yes"
-#    }
-#}
+    tags = {
+        Name        = "jpapazian-solvay-public"
+        owner       = "jpapazian"
+        se-region   = "europe west 3"
+        purpose     = "customer solvay vault ssh demo"
+        ttl         = "8"
+        terraform   = "yes"
+    }
+}
 
-#resource "aws_internet_gateway" "gw" {
-#    vpc_id          = aws_vpc.solvay.id
+resource "aws_internet_gateway" "gw" {
+    vpc_id          = aws_vpc.solvay.id
 
-#    tags = {
-#        Name        = "jpapazian-solvay-private"
-#        owner       = "jpapazian"
-#        se-region   = "europe west 3"
-#        purpose     = "customer solvay vault ssh demo"
-#        ttl         = "8"
-#        terraform   = "yes"
-#    }
-#}
+    tags = {
+        Name        = "jpapazian-solvay-private"
+        owner       = "jpapazian"
+        se-region   = "europe west 3"
+        purpose     = "customer solvay vault ssh demo"
+        ttl         = "8"
+        terraform   = "yes"
+    }
+}
 
-#resource "aws_route_table" "vpc_r" {
-#    vpc_id          = aws_vpc.solvay.id
+resource "aws_route_table" "vpc_r" {
+    vpc_id          = aws_vpc.solvay.id
 
-#    route {
-#        cidr_block  = "0.0.0.0/0"
-#        gateway_id  = aws_internet_gateway.gw.id
-#    }
-#}
+    route {
+        cidr_block  = "0.0.0.0/0"
+        gateway_id  = aws_internet_gateway.gw.id
+    }
+}
 
-#resource "aws_subnet" "private" {
-#    vpc_id          = aws_vpc.solvay.id
-#    cidr_block      = "10.10.20.0/24"
+resource "aws_subnet" "private" {
+    vpc_id          = aws_vpc.solvay.id
+    cidr_block      = "10.10.20.0/24"
 
-#    tags = {
-#        Name        = "jpapazian-solvay-public"
-#        owner       = "jpapazian"
-#        se-region   = "europe west 3"
-#        purpose     = "customer solvay vault ssh demo"
-#        ttl         = "8"
-#        terraform   = "yes"
-#    }
-#}
+    tags = {
+        Name        = "jpapazian-solvay-public"
+        owner       = "jpapazian"
+        se-region   = "europe west 3"
+        purpose     = "customer solvay vault ssh demo"
+        ttl         = "8"
+        terraform   = "yes"
+    }
+}
+resource "aws_network_acl" "solvay_vpc" {
+  vpc_id = aws_vpc.solvay.id
 
-#data "aws_subnet" "select_private" {
-#    id              = aws_subnet.private.id
-#}
+  egress {
+    protocol   = "-1"
+    rule_no    = 200
+    action     = "allow"
+    cidr_block = "10.10.0.0/16"
+    from_port  = 0
+    to_port    = 0
+  }
+
+  ingress {
+    protocol   = "-1"
+    rule_no    = 100
+    action     = "allow"
+    cidr_block = "10.10.0.0/16"
+    from_port  = 0
+    to_port    = 0
+  }
+
+  tags = {
+    Name = "main"
+  }
+}
+
+data "aws_subnet" "select_private" {
+    id              = aws_subnet.private.id
+}
 
 #resource "aws_network_interface" "private_if" {
 #    subnet_id       = aws_subnet.private.id
@@ -97,23 +122,23 @@ resource "aws_security_group" "allow_ssh_from_public" {
     }
 }
 
-#resource "aws_security_group" "allow_ssh_from_private" {
-#    name            = "allow ssh from private"
-#    description     = "allow ssh inbound traffic from private"
-#    vpc_id         = aws_vpc.solvay.id
+resource "aws_security_group" "allow_ssh_from_private" {
+    name            = "allow ssh from private"
+    description     = "allow ssh inbound traffic from private"
+    vpc_id         = aws_vpc.solvay.id
 
-#    tags = {
-#        Name        = "solvay-private-sg"
-#    }
+    tags = {
+        Name        = "solvay-private-sg"
+    }
 
-#    ingress {
-#        description = "allow ingress ssh from private"
-#        from_port   = 22
-#        to_port     = 22
-#        protocol    = "tcp"
-#        cidr_blocks = [data.aws_subnet.select_private.cidr_block]
-#    }
-#}
+    ingress {
+        description = "allow ingress ssh from private"
+        from_port   = 22
+        to_port     = 22
+        protocol    = "tcp"
+        cidr_blocks = [data.aws_subnet.select_private.cidr_block]
+    }
+}
 
 resource "aws_instance" "ubuntu_public" {
     ami                         = var.ubuntu_ami
