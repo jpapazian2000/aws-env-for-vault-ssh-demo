@@ -102,7 +102,7 @@ resource "aws_key_pair" "ubuntu_kp" {
 resource "aws_security_group" "allow_ssh_from_public" {
     name            = "allow ssh from public"
     description     = "allow ssh inbound traffic"
-#   vpc_id          = aws_vpc.solvay.id
+   vpc_id          = aws_vpc.solvay.id
 
     tags = {
         Name        = "jpapazian-solvay-public"
