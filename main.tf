@@ -56,7 +56,7 @@ resource "aws_route_table" "vpc_r" {
     }
 }
 
-resource "aws_route_table_assocuation" "route-to-private" {
+resource "aws_route_table_association" "route-to-private" {
     subnet_id       = aws_subnet.private.id
     route_table_id  = aws.aws_route_table.vpc_r.id
 }
