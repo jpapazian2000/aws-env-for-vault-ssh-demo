@@ -49,11 +49,16 @@ resource "aws_route_table" "vpc_r" {
         ttl         = "8"
         terraform   = "yes"
     }
-    
+
     route {
         cidr_block  = "0.0.0.0/0"
         gateway_id  = aws_internet_gateway.gw.id
     }
+}
+
+resource "aws_route_table_assocuation" "route-to-private" {
+    subnet_id       = aws_subnet.private.id
+    route_table_id  = aws.aws_route_table.vpc_r.id
 }
 
 resource "aws_subnet" "private" {
