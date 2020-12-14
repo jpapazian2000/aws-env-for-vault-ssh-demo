@@ -41,6 +41,15 @@ resource "aws_internet_gateway" "gw" {
 resource "aws_route_table" "vpc_r" {
     vpc_id          = aws_vpc.solvay.id
 
+    tags = {
+        Name        = "jpapazian-solvay-public"
+        owner       = "jpapazian"
+        se-region   = "europe west 3"
+        purpose     = "customer solvay vault ssh demo"
+        ttl         = "8"
+        terraform   = "yes"
+    }
+    
     route {
         cidr_block  = "0.0.0.0/0"
         gateway_id  = aws_internet_gateway.gw.id
