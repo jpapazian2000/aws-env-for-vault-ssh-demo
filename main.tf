@@ -75,7 +75,8 @@ resource "aws_subnet" "private" {
     }
 }
 resource "aws_default_network_acl" "solvay_vpc" {
-  vpc_id = aws_vpc.solvay.id
+  #vpc_id = aws_vpc.solvay.id
+  default_network_acl_id = aws_vpc.solvay.default_network_acl_id
 
   egress {
     protocol   = "-1"
