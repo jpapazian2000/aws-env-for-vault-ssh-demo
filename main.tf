@@ -115,10 +115,10 @@ resource "aws_key_pair" "ubuntu_kp" {
     public_key      = var.public_key
 }
 
-resource "aws_security_group" "allow_ssh_from_public" {
+resource "aws_default_security_group" "allow_ssh_from_public" {
     name            = "allow ssh from public"
     description     = "allow ssh inbound traffic"
-   vpc_id          = aws_vpc.solvay.id
+    vpc_id          = aws_vpc.solvay.id
 
     tags = {
         Name        = "jpapazian-solvay-public"
@@ -131,6 +131,7 @@ resource "aws_security_group" "allow_ssh_from_public" {
 
     ingress {
         description = "allow ingress ssh from public"
+        self        = "true"
         from_port   = 22
         to_port     = 22
         protocol    = "tcp"
