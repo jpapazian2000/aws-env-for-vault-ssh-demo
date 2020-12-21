@@ -18,10 +18,6 @@ variable "allowed_public_ip" {
      description    = "smallest size to get a free tier for testing purposes"
  }
 
- variable "remote_public_ip" {
-     description    = "remote ip allowed to connect to instances"
- }
-
  variable "public_key" {
      default        = ""
      description    = "public key pair for the instance"
