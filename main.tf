@@ -131,7 +131,7 @@ resource "aws_default_security_group" "allow_ssh_from_public" {
 
     ingress {
         description = "allow ingress ssh from public"
-        self        = "true"
+        #self        = "true"
         from_port   = 22
         to_port     = 22
         protocol    = "tcp"
