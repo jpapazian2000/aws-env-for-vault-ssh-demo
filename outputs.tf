@@ -15,7 +15,7 @@ output "ubuntu_pub-server_public_ip" {
 #}
 
 output "vpc" {
-    value = aws_vpc.solvay.tags.Name
+    value = aws_vpc.ssh_project.tags.Name
 }
 
 output "private_subnet" {
