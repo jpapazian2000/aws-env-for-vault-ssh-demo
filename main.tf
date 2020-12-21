@@ -116,8 +116,8 @@ resource "aws_key_pair" "ubuntu_kp" {
 }
 
 resource "aws_default_security_group" "allow_ssh_from_public" {
-    name            = "allow_ssh_from_public"
-    description     = "allow_ssh_inbound_traffic"
+    #name            = "allow_ssh_from_public"
+    #description     = "allow_ssh_inbound_traffic"
     vpc_id          = aws_vpc.solvay.id
 
     tags = {
