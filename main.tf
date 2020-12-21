@@ -57,10 +57,10 @@ resource "aws_default_route_table" "main" {
     }
 }
 
-#resource "aws_route_table_association" "route-to-private" {
-#    subnet_id       = aws_subnet.private.id
-#    route_table_id  = aws_route_table.vpc_r.id
-#}
+resource "aws_route_table_association" "route-to-private" {
+    subnet_id       = aws_subnet.private.id
+    route_table_id  = aws_default_route_table.main.id
+}
 
 resource "aws_subnet" "private" {
     vpc_id          = aws_vpc.solvay.id
