@@ -74,7 +74,7 @@ resource "aws_subnet" "private" {
         terraform   = "yes"
     }
 }
-resource "aws_network_acl" "solvay_vpc" {
+resource "aws_default_network_acl" "solvay_vpc" {
   vpc_id = aws_vpc.solvay.id
 
   egress {
@@ -96,7 +96,7 @@ resource "aws_network_acl" "solvay_vpc" {
   }
 
   tags = {
-    Name = "main"
+    Name = "default network acl-JP"
   }
 }
 
