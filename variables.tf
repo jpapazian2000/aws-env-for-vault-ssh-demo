@@ -1,3 +1,8 @@
+variable project {
+    default     = ""
+    description = "a name to customize the demonstration"
+}
+
 variable "region" {
     default     = "eu-west-3"
     description = "region to start the instances"

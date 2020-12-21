@@ -11,42 +11,41 @@ terraform {
 provider "aws" {
     region = var.region
 }
-resource "aws_vpc" "solvay" {
+resource "aws_vpc" "ssh_project" {
     cidr_block              = "10.10.0.0/16"
     enable_dns_hostnames    = true
 
     tags = {
-        Name        = "jpapazian-solvay-public"
+        Name        = "jpapazian-${var.project}-public"
         owner       = "jpapazian"
         se-region   = "europe west 3"
-        purpose     = "customer solvay vault ssh demo"
+        purpose     = "vault ssh demo for customer"
         ttl         = "8"
         terraform   = "yes"
     }
 }
 
 resource "aws_internet_gateway" "gw" {
-    vpc_id          = aws_vpc.solvay.id
+    vpc_id          = aws_vpc.ssh_project.id
 
     tags = {
-        Name        = "jpapazian-solvay-private"
+        Name        = "jpapazian-${var.project}-public"
         owner       = "jpapazian"
         se-region   = "europe west 3"
-        purpose     = "customer solvay vault ssh demo"
+        purpose     = "vault ssh demo for customer"
         ttl         = "8"
         terraform   = "yes"
     }
 }
 
 resource "aws_default_route_table" "main" {
-    #vpc_id          = aws_vpc.solvay.id
-    default_route_table_id = aws_vpc.solvay.default_route_table_id
+    default_route_table_id = aws_vpc.ssh_project.default_route_table_id
 
     tags = {
-        Name        = "jpapazian-solvay-public"
+        Name        = "jpapazian-${var.project}-public"
         owner       = "jpapazian"
         se-region   = "europe west 3"
-        purpose     = "customer solvay vault ssh demo"
+        purpose     = "vault ssh demo for customer"
         ttl         = "8"
         terraform   = "yes"
     }
@@ -63,21 +62,20 @@ resource "aws_route_table_association" "route-to-private" {
 }
 
 resource "aws_subnet" "private" {
-    vpc_id          = aws_vpc.solvay.id
+    vpc_id          = aws_vpc.ssh_project.id
     cidr_block      = "10.10.20.0/24"
 
     tags = {
-        Name        = "jpapazian-solvay-public"
+        Name        = "jpapazian-${var.project}-public"
         owner       = "jpapazian"
         se-region   = "europe west 3"
-        purpose     = "customer solvay vault ssh demo"
+        purpose     = "vault ssh demo for customer"
         ttl         = "8"
         terraform   = "yes"
     }
 }
-resource "aws_default_network_acl" "solvay_vpc" {
-  #vpc_id = aws_vpc.solvay.id
-  default_network_acl_id = aws_vpc.solvay.default_network_acl_id
+resource "aws_default_network_acl" "ssh_vpc_nacl" {
+  default_network_acl_id = aws_vpc.ssh_project.default_network_acl_id
 
   egress {
     protocol   = "-1"
@@ -118,13 +116,13 @@ resource "aws_key_pair" "ubuntu_kp" {
 resource "aws_default_security_group" "allow_ssh_from_public" {
     #name            = "allow_ssh_from_public"
     #description     = "allow_ssh_inbound_traffic"
-    vpc_id          = aws_vpc.solvay.id
+    vpc_id          = aws_vpc.ssh_project.id
 
     tags = {
-        Name        = "jpapazian-solvay-public"
+        Name        = "jpapazian-${var.project}-public"
         owner       = "jpapazian"
         se-region   = "europe west 3"
-        purpose     = "customer solvay vault ssh demo"
+        purpose     = "vault ssh demo for customer"
         ttl         = "8"
         terraform   = "yes"
     }
@@ -142,10 +140,10 @@ resource "aws_default_security_group" "allow_ssh_from_public" {
 resource "aws_security_group" "allow_ssh_from_private" {
     name            = "allow ssh from private"
     description     = "allow ssh inbound traffic from private"
-    vpc_id         = aws_vpc.solvay.id
+    vpc_id         = aws_vpc.ssh_project.id
 
     tags = {
-        Name        = "solvay-private-sg"
+        Name        = "${var.project}-private-sg"
     }
 
     ingress {
@@ -170,10 +168,10 @@ resource "aws_instance" "ubuntu_public" {
     depends_on      = [aws_internet_gateway.gw]
 
     tags = {
-        Name        = "jpapazian-solvay-public"
+        Name        = "jpapazian-${var.project}-public"
         owner       = "jpapazian"
         se-region   = "europe west 3"
-        purpose     = "customer solvay vault ssh demo"
+        purpose     = "vault ssh demo for customer"
         ttl         = "8"
         terraform   = "yes"
     }
@@ -192,10 +190,10 @@ resource "aws_instance" "ubuntu_public" {
 #    depends_on      = [aws_internet_gateway.gw]
 
 #    tags = {
-#        Name        = "jpapazian-solvay-private"
+#        Name        = "jpapazian-${var.project}-public"
 #        owner       = "jpapazian"
 #        se-region   = "europe west 3"
-#        purpose     = "customer solvay vault ssh demo"
+#        purpose     = "vault ssh demo for customer"
 #        ttl         = "8"
 #        terraform   = "yes"
 #    }
