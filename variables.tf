@@ -3,6 +3,11 @@ variable "region" {
     description = "region to start the instances"
 }
 
+variable "allowed_public_ip" {
+    default     = ""
+    description = "remote ip allowed to connect to instances"
+}
+
  variable "ubuntu_ami" {
      default        = "ami-0d3f551818b21ed81"
      description    = "ami of the ubuntu serveur we want to create"
