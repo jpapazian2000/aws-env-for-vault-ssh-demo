@@ -155,7 +155,7 @@ resource "aws_security_group" "allow_ssh_from_private" {
     }
 }
 data "template_file" "user_data" {
-  template = file("../scripts/add-ssh-config.yaml")
+  template = file("${path.root}/scripts/add-ssh-config.yaml")
 vars = {
     public_k = var.public_key
   }
