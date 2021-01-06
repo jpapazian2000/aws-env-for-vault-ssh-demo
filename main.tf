@@ -154,7 +154,12 @@ resource "aws_security_group" "allow_ssh_from_private" {
         cidr_blocks = [data.aws_subnet.select_private.cidr_block]
     }
 }
-
+data "template_file" "user_data" {
+  template = file("../scripts/add-ssh-config.yaml")
+vars = {
+    public_k = var.public_key
+  }
+}
 resource "aws_instance" "ubuntu_public" {
     ami                         = var.ubuntu_ami
     instance_type               = var.instance_type
@@ -164,7 +169,7 @@ resource "aws_instance" "ubuntu_public" {
     #    aws_default_security_group.allow_ssh_from_public.id,
     #]
     associate_public_ip_address = true
-
+    user_data                   = data.template_file.user_data.rendered
     depends_on      = [aws_internet_gateway.gw]
 
     tags = {
