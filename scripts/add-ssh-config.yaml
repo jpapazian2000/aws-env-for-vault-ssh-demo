@@ -12,5 +12,6 @@ users:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDU6LdWwbTOVoEAGTCwsG/1fVYHtzmuHDwVF0WepLENBiN0r4Zl+z/A31xAReE0uH4ewzC6WDtiueTvqA046I+pErBiW48YOt0LYZU4TUT6ccCQrPzu7PWJu81PpXwDzGyBIuD3ICyjZgoyVutezB2w2itGs+fRIQSvyLXztNRY4liaqtEM8jb16nxCseHOFM+BVP7sGcfLtdth7rHqaepqjmSWRb8JPtqGB0UN3FdQYO/X+V0s9CP0y6UrCHSmz71XT00eY3U1Uq+zKIP/4Jj0V2G2vrI3K91VrdWu8Ur7fkjZrwq8sdsip/KEbpYnV6dmAZluSTiap4JMMm1Vy8H9LXEdGWotVXRccOkmDZ3FVcw9wf+qH6eV1FJ3T3IBq0S8+o9bSydrc9v8BYZ0W95EbLHw0dUo8ZL6RKavVfABBJS8hs5eDp8ffUHJAZJEb7JnVObT08FqUiOrB8kwxghh9bBOEpC5A74WuybjlbKgIouI3KE2AYOvfLqGcjYQz3U= ubuntu
 runcmd:
   - echo "${public_k}" >> /etc/ssh/trusted-user-ca-keys.pem
+  - echo "${ssh_ca_key}" >> etc/ssh/trusted-user-ca-keys.pem
   - echo "TrustedUserCAKeys /etc/ssh/trusted-user-ca-keys.pem" >> /etc/ssh/sshd_config
   - sudo systemctl restart ssh
