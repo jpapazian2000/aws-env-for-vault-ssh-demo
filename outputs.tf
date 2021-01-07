@@ -14,9 +14,9 @@ output "ssh-ca-public_key" {
 #    value = aws_instance.ubuntu_public.private_ip
 #}
 
-#output "ubuntu_priv-server_private_ip" {
-#    value = aws_instance.ubuntu_private.private_ip
-#}
+output "ubuntu_priv-server_private_ip" {
+    value = aws_instance.ubuntu_private.private_ip
+}
 
 output "vpc" {
     value = aws_vpc.ssh_project.tags.Name
