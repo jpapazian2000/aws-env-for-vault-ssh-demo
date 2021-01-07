@@ -205,7 +205,7 @@ resource "aws_instance" "ubuntu_private" {
     key_name                    = aws_key_pair.ubuntu_kp.key_name
     subnet_id                   = aws_subnet.private.id
     vpc_security_group_ids      = [
-        aws_default_security_group.allow_ssh_from_private.id,
+        aws_security_group.allow_ssh_from_private.id,
     ]
     associate_public_ip_address = false
     user_data                   = data.template_file.private_user_data.rendered
