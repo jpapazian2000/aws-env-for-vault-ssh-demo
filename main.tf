@@ -11,7 +11,7 @@ data "terraform_remote_state" "ssh_ca_public_key" {
     backend                 = "remote"
     config                  = {
         organization        = "jpapazian-org"
-        workspace           = {
+        workspaces          = {
             name            = "vault-ssh-conf"
         }
     }
