@@ -211,7 +211,7 @@ resource "aws_instance" "ubuntu_private" {
     depends_on      = [aws_internet_gateway.gw]
 
     tags = {
-        Name        = "jpapazian-${var.project}-public"
+        Name        = "jpapazian-${var.project}-private"
         owner       = "jpapazian"
         se-region   = "europe west 3"
         purpose     = "vault ssh demo for customer"
