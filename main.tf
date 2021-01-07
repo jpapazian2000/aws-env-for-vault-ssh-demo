@@ -163,23 +163,30 @@ resource "aws_security_group" "allow_ssh_from_private" {
         cidr_blocks = [data.aws_subnet.select_private.cidr_block]
     }
 }
-data "template_file" "user_data" {
+data "template_file" "public_user_data" {
   template = file("${path.root}/scripts/add-ssh-config.yaml")
 vars = {
-    public_k    = var.public_key
     ssh_ca_key  = chomp(data.terraform_remote_state.ssh_ca_public_key.outputs.vault_public_key)
   }
 }
+
+data "template_file" "private_user_data" {
+  template = file("${path.root}/scripts/add-ssh-config.yaml")
+vars = {
+    public_k    = var.public_key
+  }
+}
+
 resource "aws_instance" "ubuntu_public" {
     ami                         = var.ubuntu_ami
     instance_type               = var.instance_type
     key_name                    = aws_key_pair.ubuntu_kp.key_name
     subnet_id                   = aws_subnet.private.id
-    #vpc_security_group_ids      = [
-    #    aws_default_security_group.allow_ssh_from_public.id,
-    #]
+    vpc_security_group_ids      = [
+        aws_default_security_group.allow_ssh_from_public.id,
+    ]
     associate_public_ip_address = true
-    user_data                   = data.template_file.user_data.rendered
+    user_data                   = data.template_file.public_user_data.rendered
     depends_on      = [aws_internet_gateway.gw]
 
     tags = {
@@ -192,24 +199,24 @@ resource "aws_instance" "ubuntu_public" {
     }
 }
 
-#resource "aws_instance" "ubuntu_private" {
-#    ami                         = var.ubuntu_ami
-#    instance_type               = var.instance_type
-#    key_name                    = aws_key_pair.ubuntu_kp.key_name
-#    subnet_id                   = aws_subnet.private.id
-#    vpc_security_group_ids      = [
-#        aws_security_group.allow_ssh_from_private.id,
-#    ]
-#    associate_public_ip_address = false
+resource "aws_instance" "ubuntu_private" {
+    ami                         = var.ubuntu_ami
+    instance_type               = var.instance_type
+    key_name                    = aws_key_pair.ubuntu_kp.key_name
+    subnet_id                   = aws_subnet.private.id
+    vpc_security_group_ids      = [
+        aws_default_security_group.allow_ssh_from_private.id,
+    ]
+    associate_public_ip_address = false
+    user_data                   = data.template_file.private_user_data.rendered
+    depends_on      = [aws_internet_gateway.gw]
 
-#    depends_on      = [aws_internet_gateway.gw]
-
-#    tags = {
-#        Name        = "jpapazian-${var.project}-public"
-#        owner       = "jpapazian"
-#        se-region   = "europe west 3"
-#        purpose     = "vault ssh demo for customer"
-#        ttl         = "8"
-#        terraform   = "yes"
-#    }
-#}
+    tags = {
+        Name        = "jpapazian-${var.project}-public"
+        owner       = "jpapazian"
+        se-region   = "europe west 3"
+        purpose     = "vault ssh demo for customer"
+        ttl         = "8"
+        terraform   = "yes"
+    }
+}
