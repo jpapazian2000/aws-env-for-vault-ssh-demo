@@ -163,17 +163,17 @@ resource "aws_security_group" "allow_ssh_from_private" {
         cidr_blocks = [data.aws_subnet.select_private.cidr_block]
     }
 }
-data "template_file" "public_user_data" {
-  template = file("${path.root}/scripts/add-ssh-config.yaml")
-vars = {
-    ssh_ca_key  = chomp(data.terraform_remote_state.ssh_ca_public_key.outputs.vault_public_key)
-  }
-}
-
 data "template_file" "private_user_data" {
   template = file("${path.root}/scripts/add-ssh-config.yaml")
 vars = {
-    public_k    = var.public_key
+    ssh_key  = chomp(data.terraform_remote_state.ssh_ca_public_key.outputs.vault_public_key)
+  }
+}
+
+data "template_file" "public_user_data" {
+  template = file("${path.root}/scripts/add-ssh-config.yaml")
+vars = {
+    ssh_key    = var.public_key
   }
 }
 
