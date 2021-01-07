@@ -7,7 +7,7 @@ output "ubuntu_pub-server_public_ip" {
 }
 
 output "ssh-ca-public_key" {
-    value = data.terraform_remote_state.ssh_ca_public_key.outputs.vault_public_key
+    value = chomp(data.terraform_remote_state.ssh_ca_public_key.outputs.vault_public_key)
 }
 
 #output "ubuntu_pub-server_private_ip" {
