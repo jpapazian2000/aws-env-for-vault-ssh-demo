@@ -167,7 +167,7 @@ data "template_file" "user_data" {
   template = file("${path.root}/scripts/add-ssh-config.yaml")
 vars = {
     public_k    = var.public_key
-    ssh_ca_key  = data.terraform_remote_state.ssh_ca_public_key.outputs.vault_public_key
+    ssh_ca_key  = chomp(data.terraform_remote_state.ssh_ca_public_key.outputs.vault_public_key)
   }
 }
 resource "aws_instance" "ubuntu_public" {
