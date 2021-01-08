@@ -15,7 +15,7 @@ output "ssh-ca-public_key" {
 #}
 
 output "ubuntu_ubuntu-server_private_ip" {
-    value = aws_instance.ubuntu_private.private_ip
+    value = aws_instance.ubuntu_server.private_ip
 }
  output "ubuntu_server-public_ip" {
      value = aws_instance.ubuntu_server.public_ip
