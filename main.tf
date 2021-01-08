@@ -179,7 +179,6 @@ resource "aws_instance" "ubuntu_public" {
         aws_default_security_group.allow_ssh_from_public.id,
     ]
     associate_public_ip_address = true
-    user_data                   = data.template_file.public_user_data.rendered
     depends_on      = [aws_internet_gateway.gw]
 
     tags = {
