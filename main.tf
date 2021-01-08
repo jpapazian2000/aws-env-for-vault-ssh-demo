@@ -163,14 +163,14 @@ resource "aws_security_group" "allow_ssh_from_private" {
         cidr_blocks = [data.aws_subnet.select_private.cidr_block]
     }
 }
-data "template_file" "private_user_data" {
+data "template_file" "user_data" {
   template = file("${path.root}/scripts/add-ssh-config.yaml")
 vars = {
     ssh_key  = chomp(data.terraform_remote_state.ssh_ca_public_key.outputs.vault_public_key)
   }
 }
 
-resource "aws_instance" "ubuntu_public" {
+resource "aws_instance" "bastion" {
     ami                         = var.ubuntu_ami
     instance_type               = var.instance_type
     key_name                    = aws_key_pair.ubuntu_kp.key_name
@@ -182,7 +182,7 @@ resource "aws_instance" "ubuntu_public" {
     depends_on      = [aws_internet_gateway.gw]
 
     tags = {
-        Name        = "jpapazian-${var.project}-public"
+        Name        = "jpapazian-${var.project}-bastion"
         owner       = "jpapazian"
         se-region   = "europe west 3"
         purpose     = "vault ssh demo for customer"
@@ -191,7 +191,7 @@ resource "aws_instance" "ubuntu_public" {
     }
 }
 
-resource "aws_instance" "ubuntu_private" {
+resource "aws_instance" "ubuntu_server" {
     ami                         = var.ubuntu_ami
     key_name                    = aws_key_pair.ubuntu_kp.key_name
     instance_type               = var.instance_type
@@ -199,12 +199,12 @@ resource "aws_instance" "ubuntu_private" {
     #vpc_security_group_ids      = [
     #    aws_security_group.allow_ssh_from_private.id,
     #]
-    associate_public_ip_address = false
-    user_data                   = data.template_file.private_user_data.rendered
+    associate_public_ip_address = true
+    user_data                   = data.template_file.user_data.rendered
     depends_on      = [aws_internet_gateway.gw]
 
     tags = {
-        Name        = "jpapazian-${var.project}-private"
+        Name        = "jpapazian-${var.project}-server"
         owner       = "jpapazian"
         se-region   = "europe west 3"
         purpose     = "vault ssh demo for customer"
