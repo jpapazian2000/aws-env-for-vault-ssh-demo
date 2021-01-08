@@ -170,13 +170,6 @@ vars = {
   }
 }
 
-data "template_file" "public_user_data" {
-  template = file("${path.root}/scripts/add-ssh-config.yaml")
-vars = {
-    ssh_key    = var.public_key
-  }
-}
-
 resource "aws_instance" "ubuntu_public" {
     ami                         = var.ubuntu_ami
     instance_type               = var.instance_type
@@ -201,6 +194,7 @@ resource "aws_instance" "ubuntu_public" {
 
 resource "aws_instance" "ubuntu_private" {
     ami                         = var.ubuntu_ami
+    key_name                    = aws_key_pair.ubuntu_kp.key_name
     instance_type               = var.instance_type
     subnet_id                   = aws_subnet.private.id
     vpc_security_group_ids      = [
