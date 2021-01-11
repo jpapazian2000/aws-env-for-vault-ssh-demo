@@ -144,6 +144,14 @@ resource "aws_default_security_group" "allow_ssh_from_public" {
         protocol    = "tcp"
         cidr_blocks = [var.allowed_public_ip]
     }
+    egress {
+        description = "allow ingress ssh to private"
+        #self        = "true"
+        from_port   = 22
+        to_port     = 22
+        protocol    = "tcp"
+        cidr_blocks = [[data.aws_subnet.select_private.cidr_block]
+    }
 }
 
 resource "aws_security_group" "allow_ssh_from_private" {

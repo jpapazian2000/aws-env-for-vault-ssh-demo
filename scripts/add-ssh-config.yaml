@@ -11,4 +11,6 @@ users:
 runcmd:
   - echo "${ssh_key}" >> /etc/ssh/trusted-user-ca-keys.pem
   - echo "TrustedUserCAKeys /etc/ssh/trusted-user-ca-keys.pem" >> /etc/ssh/sshd_config
+#the next line allows for the ssh rsa signature algorythm to be taken into account, accordingly to https://sarunas-krisciukaitis.medium.com/hashicorp-vault-ssh-secret-engine-with-openssh-8-2-and-later-f7405ee55d19
+  - echo "CASignatureAlgorithms ^ssh-rsa" >> /etc/ssh+sshd_config
   - sudo systemctl restart ssh
