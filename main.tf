@@ -201,7 +201,7 @@ resource "aws_instance" "bastion" {
 
 resource "aws_instance" "ubuntu_server" {
     ami                         = var.ubuntu_ami
-    #key_name                    = aws_key_pair.ubuntu_kp.key_name
+    key_name                    = aws_key_pair.ubuntu_kp.key_name
     instance_type               = var.instance_type
     subnet_id                   = aws_subnet.private.id
     vpc_security_group_ids      = [
