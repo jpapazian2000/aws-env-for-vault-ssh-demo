@@ -204,9 +204,9 @@ resource "aws_instance" "ubuntu_server" {
     key_name                    = aws_key_pair.ubuntu_kp.key_name
     instance_type               = var.instance_type
     subnet_id                   = aws_subnet.private.id
-    #vpc_security_group_ids      = [
-    #    aws_security_group.allow_ssh_from_private.id,
-    #]
+    vpc_security_group_ids      = [
+        aws_security_group.allow_ssh_from_private.id,
+    ]
     associate_public_ip_address = true
     user_data                   = data.template_file.user_data.rendered
     depends_on      = [aws_internet_gateway.gw]
